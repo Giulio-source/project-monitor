@@ -20,6 +20,7 @@ permissions:
     - write:jira-work
     - storage:app
     - manage:jira-project
+    - read:jira-user
   content:
     styles:
       - "unsafe-inline"

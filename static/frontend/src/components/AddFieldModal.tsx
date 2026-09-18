@@ -11,10 +11,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface AddFieldModalProps {
   onAddColumn: (label: string, type: ColumnType) => Promise<boolean>;
 }
+
+const FIELD_TYPES: { value: ColumnType; label: string }[] = [
+  { value: "text", label: "Text (Single Line)" },
+  { value: "number", label: "Number" },
+  { value: "date", label: "Date" },
+  { value: "boolean", label: "Checkbox / Flag" },
+  { value: "user", label: "User Picker" },
+  { value: "url", label: "URL / External Link" },
+];
 
 export function AddFieldModal({ onAddColumn }: AddFieldModalProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,17 +91,21 @@ export function AddFieldModal({ onAddColumn }: AddFieldModalProps) {
               >
                 Field Type
               </label>
-              <select
-                id="fieldType"
+              <Select
                 value={fieldType}
-                onChange={(e) => setFieldType(e.target.value as ColumnType)}
-                className="w-full h-9 text-xs rounded-md border border-slate-200 bg-white px-3 py-1 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                onValueChange={(val) => setFieldType(val as ColumnType)}
               >
-                <option value="text">Text (Single Line)</option>
-                <option value="number">Number</option>
-                <option value="date">Date</option>
-                <option value="boolean">Checkbox / Flag</option>
-              </select>
+                <SelectTrigger id="fieldType" className="w-full">
+                  <SelectValue placeholder="Select field type" />
+                </SelectTrigger>
+                <SelectContent position="popper" className="z-[9999]">
+                  {FIELD_TYPES.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

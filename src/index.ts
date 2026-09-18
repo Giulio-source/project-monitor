@@ -102,13 +102,36 @@ resolver.define("getProjectsWithProperties", async () => {
 
   const isGlobal = await isGlobalAdmin();
 
-  // Evaluate project-level edit rights per project
   const projectsWithPermissions = await Promise.all(
     projects.map(async (project: any) => {
       const canEdit = isGlobal || (await canAdminProject(project.id));
+      let completedIssueCount = 0;
+
+      try {
+        const countRes = await api
+          .asUser()
+          .requestJira(route`/rest/api/3/search/approximate-count`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              jql: `project = "${project.key}" AND status IN ("Done", "Resolved", "Closed")`,
+            }),
+          });
+        if (countRes.ok) {
+          const countData = await countRes.json();
+          completedIssueCount = countData.count ?? 0;
+        }
+      } catch {
+        completedIssueCount = 0;
+      }
+
       return {
         ...project,
         canEdit,
+        insight: {
+          totalIssueCount: project.insight?.totalIssueCount ?? 0,
+          completedIssueCount,
+        },
       };
     }),
   );
@@ -154,6 +177,29 @@ resolver.define("updateProjectProperty", async ({ payload }) => {
 resolver.define("getDebugStorage", async () => {
   const results = await kvs.query().getMany();
   return results;
+});
+
+resolver.define("searchJiraUsers", async (req) => {
+  const { query } = req.payload;
+  const searchParam =
+    query && query.trim().length > 0 ? encodeURIComponent(query.trim()) : "";
+
+  const res = await api
+    .asUser()
+    .requestJira(
+      route`/rest/api/3/user/search?query=${searchParam}&maxResults=10`,
+    );
+
+  if (!res.ok) return [];
+  const users = await res.json();
+
+  return users
+    .filter((u: any) => u.accountType === "atlassian") // Exclude bots/apps
+    .map((u: any) => ({
+      accountId: u.accountId,
+      displayName: u.displayName,
+      avatarUrl: u.avatarUrls?.["24x24"] || "",
+    }));
 });
 
 export const handler = resolver.getDefinitions();

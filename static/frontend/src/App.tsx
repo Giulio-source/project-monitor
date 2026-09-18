@@ -21,27 +21,8 @@ export default function App() {
     permissions,
   } = useProjects();
 
-  const [fieldLabel, setFieldLabel] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleCreateColumn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!fieldLabel.trim()) return;
-
-    setIsSubmitting(true);
-    const success = await addColumn(fieldLabel.trim(), "text");
-    setIsSubmitting(false);
-
-    if (success) {
-      setFieldLabel("");
-      setIsDialogOpen(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50/50 p-8 space-y-6">
+    <main className="min-h-screen bg-slate-50/50 p-8 space-y-6">
       <Toaster position="bottom-right" />
 
       {/* Header Bar */}
@@ -55,9 +36,9 @@ export default function App() {
             projects.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <StorageDebugModal />
-          <Button
+        <div className="flex items-center gap-3 print:hidden">
+          {/* <StorageDebugModal /> */}
+          {/* <Button
             variant="outline"
             size="sm"
             onClick={() => {
@@ -70,7 +51,7 @@ export default function App() {
             disabled={loading}
           >
             Debug Projects
-          </Button>
+          </Button> */}
           <Button
             variant="outline"
             size="sm"
@@ -85,43 +66,16 @@ export default function App() {
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
-          <Input
-            type="text"
-            placeholder="Search projects or custom fields..."
-            className="pl-9 pr-8 h-9 text-xs bg-white"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
-            >
-              <XCircle className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-
-        <div className="text-xs text-slate-500 font-medium">
-          Total Workspace Projects: {projects.length}
-        </div>
-      </div>
-
       {/* Extracted Project Table Component */}
       <ProjectTable
         projects={projects}
         columns={columns}
         loading={loading}
         error={error}
-        searchQuery={searchQuery}
         onUpdatePropertyValue={updatePropertyValue}
         onDeleteColumn={deleteColumn}
         canManageColumns={permissions.canManageColumns}
       />
-    </div>
+    </main>
   );
 }
