@@ -9,11 +9,325 @@ modules:
   function:
     - key: resolver
       handler: index.handler
+  jira:entityProperty:
+    - key: workspace-fields-indexer
+      entityType: project
+      propertyKey: workspace_fields
+      values:
+        # --- 40 TEXT / URL / BOOLEAN SLOTS ---
+        - path: text_slot_1
+          type: string
+          searchAlias: TextSlot1
+        - path: text_slot_2
+          type: string
+          searchAlias: TextSlot2
+        - path: text_slot_3
+          type: string
+          searchAlias: TextSlot3
+        - path: text_slot_4
+          type: string
+          searchAlias: TextSlot4
+        - path: text_slot_5
+          type: string
+          searchAlias: TextSlot5
+        - path: text_slot_6
+          type: string
+          searchAlias: TextSlot6
+        - path: text_slot_7
+          type: string
+          searchAlias: TextSlot7
+        - path: text_slot_8
+          type: string
+          searchAlias: TextSlot8
+        - path: text_slot_9
+          type: string
+          searchAlias: TextSlot9
+        - path: text_slot_10
+          type: string
+          searchAlias: TextSlot10
+        - path: text_slot_11
+          type: string
+          searchAlias: TextSlot11
+        - path: text_slot_12
+          type: string
+          searchAlias: TextSlot12
+        - path: text_slot_13
+          type: string
+          searchAlias: TextSlot13
+        - path: text_slot_14
+          type: string
+          searchAlias: TextSlot14
+        - path: text_slot_15
+          type: string
+          searchAlias: TextSlot15
+        - path: text_slot_16
+          type: string
+          searchAlias: TextSlot16
+        - path: text_slot_17
+          type: string
+          searchAlias: TextSlot17
+        - path: text_slot_18
+          type: string
+          searchAlias: TextSlot18
+        - path: text_slot_19
+          type: string
+          searchAlias: TextSlot19
+        - path: text_slot_20
+          type: string
+          searchAlias: TextSlot20
+        - path: text_slot_21
+          type: string
+          searchAlias: TextSlot21
+        - path: text_slot_22
+          type: string
+          searchAlias: TextSlot22
+        - path: text_slot_23
+          type: string
+          searchAlias: TextSlot23
+        - path: text_slot_24
+          type: string
+          searchAlias: TextSlot24
+        - path: text_slot_25
+          type: string
+          searchAlias: TextSlot25
+        - path: text_slot_26
+          type: string
+          searchAlias: TextSlot26
+        - path: text_slot_27
+          type: string
+          searchAlias: TextSlot27
+        - path: text_slot_28
+          type: string
+          searchAlias: TextSlot28
+        - path: text_slot_29
+          type: string
+          searchAlias: TextSlot29
+        - path: text_slot_30
+          type: string
+          searchAlias: TextSlot30
+        - path: text_slot_31
+          type: string
+          searchAlias: TextSlot31
+        - path: text_slot_32
+          type: string
+          searchAlias: TextSlot32
+        - path: text_slot_33
+          type: string
+          searchAlias: TextSlot33
+        - path: text_slot_34
+          type: string
+          searchAlias: TextSlot34
+        - path: text_slot_35
+          type: string
+          searchAlias: TextSlot35
+        - path: text_slot_36
+          type: string
+          searchAlias: TextSlot36
+        - path: text_slot_37
+          type: string
+          searchAlias: TextSlot37
+        - path: text_slot_38
+          type: string
+          searchAlias: TextSlot38
+        - path: text_slot_39
+          type: string
+          searchAlias: TextSlot39
+        - path: text_slot_40
+          type: string
+          searchAlias: TextSlot40
+
+        # --- 20 NUMBER SLOTS ---
+        - path: number_slot_1
+          type: number
+          searchAlias: NumberSlot1
+        - path: number_slot_2
+          type: number
+          searchAlias: NumberSlot2
+        - path: number_slot_3
+          type: number
+          searchAlias: NumberSlot3
+        - path: number_slot_4
+          type: number
+          searchAlias: NumberSlot4
+        - path: number_slot_5
+          type: number
+          searchAlias: NumberSlot5
+        - path: number_slot_6
+          type: number
+          searchAlias: NumberSlot6
+        - path: number_slot_7
+          type: number
+          searchAlias: NumberSlot7
+        - path: number_slot_8
+          type: number
+          searchAlias: NumberSlot8
+        - path: number_slot_9
+          type: number
+          searchAlias: NumberSlot9
+        - path: number_slot_10
+          type: number
+          searchAlias: NumberSlot10
+        - path: number_slot_11
+          type: number
+          searchAlias: NumberSlot11
+        - path: number_slot_12
+          type: number
+          searchAlias: NumberSlot12
+        - path: number_slot_13
+          type: number
+          searchAlias: NumberSlot13
+        - path: number_slot_14
+          type: number
+          searchAlias: NumberSlot14
+        - path: number_slot_15
+          type: number
+          searchAlias: NumberSlot15
+        - path: number_slot_16
+          type: number
+          searchAlias: NumberSlot16
+        - path: number_slot_17
+          type: number
+          searchAlias: NumberSlot17
+        - path: number_slot_18
+          type: number
+          searchAlias: NumberSlot18
+        - path: number_slot_19
+          type: number
+          searchAlias: NumberSlot19
+        - path: number_slot_20
+          type: number
+          searchAlias: NumberSlot20
+
+        # --- 20 DATE SLOTS ---
+        - path: date_slot_1
+          type: date
+          searchAlias: DateSlot1
+        - path: date_slot_2
+          type: date
+          searchAlias: DateSlot2
+        - path: date_slot_3
+          type: date
+          searchAlias: DateSlot3
+        - path: date_slot_4
+          type: date
+          searchAlias: DateSlot4
+        - path: date_slot_5
+          type: date
+          searchAlias: DateSlot5
+        - path: date_slot_6
+          type: date
+          searchAlias: DateSlot6
+        - path: date_slot_7
+          type: date
+          searchAlias: DateSlot7
+        - path: date_slot_8
+          type: date
+          searchAlias: DateSlot8
+        - path: date_slot_9
+          type: date
+          searchAlias: DateSlot9
+        - path: date_slot_10
+          type: date
+          searchAlias: DateSlot10
+        - path: date_slot_11
+          type: date
+          searchAlias: DateSlot11
+        - path: date_slot_12
+          type: date
+          searchAlias: DateSlot12
+        - path: date_slot_13
+          type: date
+          searchAlias: DateSlot13
+        - path: date_slot_14
+          type: date
+          searchAlias: DateSlot14
+        - path: date_slot_15
+          type: date
+          searchAlias: DateSlot15
+        - path: date_slot_16
+          type: date
+          searchAlias: DateSlot16
+        - path: date_slot_17
+          type: date
+          searchAlias: DateSlot17
+        - path: date_slot_18
+          type: date
+          searchAlias: DateSlot18
+        - path: date_slot_19
+          type: date
+          searchAlias: DateSlot19
+        - path: date_slot_20
+          type: date
+          searchAlias: DateSlot20
+
+        # --- 20 USER SLOTS ---
+        - path: user_slot_1
+          type: user
+          searchAlias: UserSlot1
+        - path: user_slot_2
+          type: user
+          searchAlias: UserSlot2
+        - path: user_slot_3
+          type: user
+          searchAlias: UserSlot3
+        - path: user_slot_4
+          type: user
+          searchAlias: UserSlot4
+        - path: user_slot_5
+          type: user
+          searchAlias: UserSlot5
+        - path: user_slot_6
+          type: user
+          searchAlias: UserSlot6
+        - path: user_slot_7
+          type: user
+          searchAlias: UserSlot7
+        - path: user_slot_8
+          type: user
+          searchAlias: UserSlot8
+        - path: user_slot_9
+          type: user
+          searchAlias: UserSlot9
+        - path: user_slot_10
+          type: user
+          searchAlias: UserSlot10
+        - path: user_slot_11
+          type: user
+          searchAlias: UserSlot11
+        - path: user_slot_12
+          type: user
+          searchAlias: UserSlot12
+        - path: user_slot_13
+          type: user
+          searchAlias: UserSlot13
+        - path: user_slot_14
+          type: user
+          searchAlias: UserSlot14
+        - path: user_slot_15
+          type: user
+          searchAlias: UserSlot15
+        - path: user_slot_16
+          type: user
+          searchAlias: UserSlot16
+        - path: user_slot_17
+          type: user
+          searchAlias: UserSlot17
+        - path: user_slot_18
+          type: user
+          searchAlias: UserSlot18
+        - path: user_slot_19
+          type: user
+          searchAlias: UserSlot19
+        - path: user_slot_20
+          type: user
+          searchAlias: UserSlot20
+
 resources:
   - key: main
     path: static/frontend/build
     tunnel:
       port: 3000
+
 permissions:
   scopes:
     - read:jira-work
@@ -24,9 +338,35 @@ permissions:
   content:
     styles:
       - "unsafe-inline"
+
 app:
   runtime:
     name: nodejs24.x
     memoryMB: 256
     architecture: arm64
-  id: ari:cloud:ecosystem::app/7b4f151c-c1cd-4ffa-8966-e948977bad1c
+  id: ari:cloud:ecosystem::app/dc27307e-2495-4129-a72f-0aca7fe3749c
+  storage:
+    entities:
+      - name: audit_log
+        attributes:
+          timestamp:
+            type: string
+          accountId:
+            type: string
+          action:
+            type: string
+          projectId:
+            type: string
+          slotKey:
+            type: string
+          oldValue:
+            type: string
+          newValue:
+            type: string
+        indexes:
+          - name: by-timestamp
+            range:
+              - timestamp
+          - name: by-project
+            range:
+              - projectId

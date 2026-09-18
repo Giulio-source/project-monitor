@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Project, ColumnDef } from "../hooks/useProjects";
 import { Input } from "./ui/input";
 import { UserPickerCell } from "./UserPickerCell";
@@ -17,6 +17,31 @@ export function DynamicCell({
 }: DynamicCellProps) {
   const value = project.properties?.[col.id];
   const canEdit = project.canEdit ?? false;
+
+  // Local state buffer for text, number, and date inputs
+  const [localValue, setLocalValue] = useState<string | number>(value ?? "");
+
+  // Sync local buffer when external table data updates or re-fetches
+  useEffect(() => {
+    setLocalValue(value ?? "");
+  }, [value]);
+
+  const handleCommit = () => {
+    const rawOld = value ?? "";
+    const rawNew = localValue;
+
+    // Skip update if value didn't change
+    if (String(rawNew).trim() === String(rawOld).trim()) {
+      return;
+    }
+
+    let finalValue: any = localValue;
+    if (col.type === "number") {
+      finalValue = localValue === "" ? "" : Number(localValue);
+    }
+
+    onUpdatePropertyValue(project.id, col.id, finalValue);
+  };
 
   if (col.type === "boolean") {
     return (
@@ -67,19 +92,15 @@ export function DynamicCell({
           ? "bg-slate-50 text-slate-400 border-transparent cursor-not-allowed"
           : "border-transparent hover:border-slate-300 focus:border-slate-400 bg-transparent focus:bg-white"
       }`}
-      value={value ?? ""}
+      value={localValue}
       placeholder={canEdit ? "Add value..." : ""}
-      onChange={(e) =>
-        onUpdatePropertyValue(
-          project.id,
-          col.id,
-          col.type === "number"
-            ? e.target.value === ""
-              ? ""
-              : Number(e.target.value)
-            : e.target.value,
-        )
-      }
+      onChange={(e) => setLocalValue(e.target.value)}
+      onBlur={handleCommit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.currentTarget.blur(); // Triggers handleCommit via onBlur
+        }
+      }}
     />
   );
 }

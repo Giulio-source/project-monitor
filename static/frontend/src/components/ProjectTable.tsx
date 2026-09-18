@@ -12,6 +12,8 @@ import {
   Printer,
   Search,
   SearchX,
+  Check,
+  Copy,
 } from "lucide-react";
 import {
   Table,
@@ -34,6 +36,7 @@ import { router } from "@forge/bridge";
 import { ProjectProgressBar } from "./ProjectProgressBar";
 import { DynamicCell } from "./DynamicCell";
 import { downloadProjectsCSV } from "../lib/csv";
+import { toast } from "sonner";
 
 type SortConfig = { key: string; direction: "asc" | "desc" } | null;
 
@@ -47,6 +50,14 @@ interface ProjectTableProps {
   onDeleteColumn: (columnId: string, label: string) => Promise<boolean>;
 }
 
+// Helper to convert slot keys (e.g., "text_slot_1") to JQL aliases ("TextSlot1")
+const getJqlAlias = (slotKey: string) => {
+  return slotKey
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+};
+
 export function ProjectTable({
   projects,
   columns,
@@ -59,6 +70,18 @@ export function ProjectTable({
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
   const [columnToDelete, setColumnToDelete] = useState<ColumnDef | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyJql = (col: any) => {
+    const slotKey = col.slotKey || col.id;
+    const jqlSnippet = `project.${getJqlAlias(slotKey)}`;
+
+    navigator.clipboard.writeText(jqlSnippet);
+    toast.success(`Copied "${jqlSnippet}" to clipboard!`);
+
+    setCopiedId(col.id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const handleSort = (key: string) => {
     setSortConfig((current) => {
@@ -252,15 +275,28 @@ export function ProjectTable({
                     >
                       {col.label} {renderSortIcon(col.id)}
                     </button>
-                    {canManageColumns && (
+                    <div className="flex items-center gap-0.5 opacity-0 group-hover/head:opacity-100 transition-all">
                       <button
-                        onClick={() => setColumnToDelete(col)}
-                        className="opacity-0 group-hover/head:opacity-100 text-slate-400 hover:text-red-600 transition-all p-1 rounded hover:bg-red-50"
-                        title="Delete column"
+                        onClick={() => handleCopyJql(col)}
+                        className="text-slate-400 hover:text-slate-700 p-1 rounded hover:bg-slate-100"
+                        title={`Copy JQL field (project.${getJqlAlias(col.slotKey || col.id)})`}
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        {copiedId === col.id ? (
+                          <Check className="w-3.5 h-3.5 text-green-600" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
                       </button>
-                    )}
+                      {canManageColumns && (
+                        <button
+                          onClick={() => setColumnToDelete(col)}
+                          className="opacity-0 group-hover/head:opacity-100 text-slate-400 hover:text-red-600 transition-all p-1 rounded hover:bg-red-50"
+                          title="Delete column"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </TableHead>
               ))}

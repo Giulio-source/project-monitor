@@ -1,10 +1,9 @@
-import { Search, XCircle } from "lucide-react";
-import React, { useState } from "react";
 import { AddFieldModal } from "./components/AddFieldModal";
+import { AuditLogModal } from "./components/AuditLogModal";
+import { ClearPropertiesModal } from "./components/ClearPropertiesModal";
 import { ProjectTable } from "./components/ProjectTable";
 import { StorageDebugModal } from "./components/StorageDebugModal";
 import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
 import { Toaster } from "./components/ui/sonner";
 import { useProjects } from "./hooks/useProjects";
 
@@ -19,6 +18,7 @@ export default function App() {
     updatePropertyValue,
     refetch,
     permissions,
+    clearAllProperties,
   } = useProjects();
 
   return (
@@ -37,8 +37,13 @@ export default function App() {
           </p>
         </div>
         <div className="flex items-center gap-3 print:hidden">
-          {/* <StorageDebugModal /> */}
-          {/* <Button
+          <AuditLogModal />
+          <ClearPropertiesModal
+            onClearAll={clearAllProperties}
+            disabled={loading}
+          />
+          <StorageDebugModal />
+          <Button
             variant="outline"
             size="sm"
             onClick={() => {
@@ -51,7 +56,7 @@ export default function App() {
             disabled={loading}
           >
             Debug Projects
-          </Button> */}
+          </Button>
           <Button
             variant="outline"
             size="sm"

@@ -11,6 +11,7 @@ export type ColumnType =
   | "url";
 
 export interface ColumnDef {
+  slotKey: string;
   id: string;
   label: string;
   type: ColumnType;
@@ -67,28 +68,35 @@ export function useProjects() {
     label: string,
     type: ColumnType,
   ): Promise<boolean> => {
-    const id = label.toLowerCase().trim().replace(/\s+/g, "_");
+    const normalizedLabel = label.trim().toLowerCase();
 
-    if (columns.some((c) => c.id === id)) {
+    // 1. Check for duplicates using display label
+    if (columns.some((c) => c.label.trim().toLowerCase() === normalizedLabel)) {
       toast.error(`A field named "${label}" already exists.`);
       return false;
     }
 
     try {
+      // 2. Pass only label and type; backend allocates the indexed slot key
       const updatedCols = (await invoke("addColumn", {
-        id,
         label,
         type,
       })) as ColumnDef[];
-      setColumns(updatedCols);
+
+      // 3. Ensure response is an array before setting state
+      if (Array.isArray(updatedCols)) {
+        setColumns(updatedCols);
+      } else {
+        await fetchData(); // Fallback if backend returned single item
+      }
+
       toast.success(`Custom field "${label}" created.`);
-      fetchData();
       return true;
     } catch (err: any) {
       toast.error(err?.message || "Failed to create field.");
       return false;
     }
-  };
+  };;
 
   const deleteColumn = async (
     columnId: string,
@@ -128,6 +136,19 @@ export function useProjects() {
     }
   };
 
+  const clearAllProperties = async (): Promise<boolean> => {
+    try {
+      const success = (await invoke("clearAllProjectProperties")) as boolean;
+      if (success) {
+        await fetchData(); // Refresh frontend state
+      }
+      return success;
+    } catch (err) {
+      console.error("Failed to clear project properties:", err);
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -142,5 +163,6 @@ export function useProjects() {
     deleteColumn,
     updatePropertyValue,
     refetch: fetchData,
+    clearAllProperties,
   };
 }
