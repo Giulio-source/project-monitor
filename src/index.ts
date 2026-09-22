@@ -323,17 +323,24 @@ resolver.define("updateProjectProperty", async ({ payload, context }) => {
   }
 
   const oldValue = currentData[key] ?? "";
+  const updatedData = { ...currentData };
 
-  const updatedData = {
-    ...currentData,
-    [key]: value,
-  };
+  const isEmptyValue =
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" && value.trim() === "");
+
+  if (isEmptyValue) {
+    delete updatedData[key];
+  } else {
+    updatedData[key] = value;
+  }
 
   await logAuditEvent(context, "VALUE_UPDATED", {
     projectId,
     slotKey: key,
     oldValue,
-    newValue: value,
+    newValue: isEmptyValue ? "" : value,
   });
 
   const putResponse = await api

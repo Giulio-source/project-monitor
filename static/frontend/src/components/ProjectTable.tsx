@@ -275,14 +275,14 @@ export function ProjectTable({
                     >
                       {col.label} {renderSortIcon(col.id)}
                     </button>
-                    <div className="flex items-center gap-0.5 opacity-0 group-hover/head:opacity-100 transition-all">
+                    <div className="flex items-center gap-1 opacity-0 group-hover/head:opacity-100 transition-all">
                       <button
                         onClick={() => handleCopyJql(col)}
-                        className="text-slate-400 hover:text-slate-700 p-1 rounded hover:bg-slate-100"
+                        className="text-slate-400 hover:text-blue-700 p-1 rounded hover:bg-blue-100"
                         title={`Copy JQL field (project.${getJqlAlias(col.slotKey || col.id)})`}
                       >
                         {copiedId === col.id ? (
-                          <Check className="w-3.5 h-3.5 text-green-600" />
+                          <Check className="w-3.5 h-3.5 text-blue-700" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}

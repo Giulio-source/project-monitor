@@ -6,6 +6,8 @@ modules:
         function: resolver
       title: Project Monitor
       layout: blank
+      displayConditions:
+        isLoggedIn: true
   function:
     - key: resolver
       handler: index.handler

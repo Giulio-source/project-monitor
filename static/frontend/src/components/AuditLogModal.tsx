@@ -60,7 +60,7 @@ export function AuditLogModal() {
       const userIds = logs.map((l) => l.accountId);
       fetchUsers(userIds);
     }
-  }, [logs, fetchUsers]);
+  }, [logs, fetchUsers, columns]);
 
   return (
     <Dialog onOpenChange={handleOpenChange}>
@@ -72,14 +72,14 @@ export function AuditLogModal() {
       </DialogTrigger>
 
       {/* Fullscreen Overlay Styling */}
-      <DialogContent className="max-w-none w-screen h-screen rounded-none border-none p-6 flex flex-col bg-white">
+      <DialogContent className="w-[94vw] h-[90vh] max-w-none max-h-none rounded-xl p-6 flex flex-col bg-white border shadow-lg">
         <DialogHeader className="flex-shrink-0 flex flex-row items-center justify-between border-b pb-4 pr-8">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <History className="w-5 h-5 text-slate-700" />
             Activity Audit History
           </DialogTitle>
           <div className="flex items-center gap-2">
-            <Button
+            {/* <Button
               variant="destructive"
               size="sm"
               onClick={handleClearLogs}
@@ -88,7 +88,7 @@ export function AuditLogModal() {
             >
               <Trash2 className="w-3.5 h-3.5" />
               Clear History
-            </Button>
+            </Button> */}
 
             <Button
               variant="ghost"
