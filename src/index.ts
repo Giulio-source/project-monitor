@@ -236,6 +236,95 @@ resolver.define("getProjectsWithProperties", async () => {
   };
 });
 
+// Fetch issue types available for a specific project
+resolver.define("getProjectIssueTypes", async ({ payload }) => {
+  const { projectId } = payload as { projectId: string };
+
+  if (!projectId) return [];
+
+  const res = await api
+    .asUser()
+    .requestJira(route`/rest/api/3/project/${projectId}`);
+
+  if (!res.ok) return [];
+
+  const data = await res.json();
+  const issueTypes = data.issueTypes || [];
+
+  // Filter out sub-tasks so users only create top-level issues
+  return issueTypes
+    .filter((it: any) => !it.subtask)
+    .map((it: any) => ({
+      id: it.id,
+      name: it.name,
+      iconUrl: it.iconUrl,
+    }));
+});
+
+// Create issue with specified issueTypeId
+resolver.define("createProjectTask", async ({ payload, context }) => {
+  const { projectId, issueTypeId, summary, description } = payload as {
+    projectId: string;
+    issueTypeId: string;
+    summary: string;
+    description?: string;
+  };
+
+  if (!projectId || !issueTypeId || !summary) {
+    throw new Error("Project, Issue Type, and Summary are required.");
+  }
+
+  const adfDescription = description
+    ? {
+        type: "doc",
+        version: 1,
+        content: [
+          {
+            type: "paragraph",
+            content: [{ type: "text", text: description }],
+          },
+        ],
+      }
+    : undefined;
+
+  const response = await api.asUser().requestJira(route`/rest/api/3/issue`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fields: {
+        project: { id: projectId },
+        summary,
+        description: adfDescription,
+        issuetype: { id: issueTypeId },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error("Failed to create Jira issue:", errorData);
+    const errorMessage =
+      errorData.errorMessages?.[0] ||
+      (errorData.errors ? Object.values(errorData.errors).join(", ") : null) ||
+      "Failed to create task in Jira.";
+    throw new Error(errorMessage);
+  }
+
+  const issueData = await response.json();
+
+  await logAuditEvent(context, "TASK_CREATED", {
+    projectId,
+    slotKey: "N/A",
+    oldValue: "N/A",
+    newValue: `Created ${issueData.key}: ${summary}`,
+  });
+
+  return issueData;
+});
+
 resolver.define("getDebugStorage", async () => {
   const results = await kvs.query().getMany();
   return results;

@@ -1,6 +1,7 @@
 import { AddFieldModal } from "./components/AddFieldModal";
 import { AuditLogModal } from "./components/AuditLogModal";
 import { ClearPropertiesModal } from "./components/ClearPropertiesModal";
+import { CreateTaskModal } from "./components/CreateTaskModal";
 import { ProjectTable } from "./components/ProjectTable";
 import { StorageDebugModal } from "./components/StorageDebugModal";
 import { Button } from "./components/ui/button";
@@ -24,7 +25,6 @@ export default function App() {
   return (
     <main className="min-h-screen bg-slate-50/50 p-8 space-y-6">
       <Toaster position="bottom-right" />
-
       {/* Header Bar */}
       <div className="flex items-center justify-between border-b pb-5">
         <div>
@@ -37,7 +37,7 @@ export default function App() {
           </p>
         </div>
         <div className="flex items-center gap-3 print:hidden">
-          <AuditLogModal />
+          {/* <AuditLogModal />
           <ClearPropertiesModal
             onClearAll={clearAllProperties}
             disabled={loading}
@@ -56,7 +56,7 @@ export default function App() {
             disabled={loading}
           >
             Debug Projects
-          </Button>
+          </Button> */}
           <Button
             variant="outline"
             size="sm"
@@ -65,6 +65,7 @@ export default function App() {
           >
             Refresh
           </Button>
+          <CreateTaskModal onTaskCreated={refetch} />
           {permissions.canManageColumns && (
             <AddFieldModal onAddColumn={addColumn} />
           )}
